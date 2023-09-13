@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Smart Receipt</title>
+<style>
+    body{
+        background-color:lavender;
+    }
+    h1{
+        color:black;
+        font-family: Verdana;
+        text-align: center;
+    }
+	.amount {
+  position: absolute;
+  right: 300px;
+  }
+.amt{
+ position: absolute;
+ right:500px;
+}
+    
+   
+</style>
+<script>
+
+function addRow(tableID) 
+{
+     var table = document.getElementById(tableID);
+    var rowCount = table.rows.length;
+    var row = table.insertRow(rowCount);
+    var cell1 = row.insertCell(0);
+    cell1.innerHTML = rowCount;
+	
+	var cell2 = row.insertCell(1);
+	var element2 = document.createElement("input");
+	element2.type = "text";
+	element2.name = "pname";
+	cell2.appendChild(element2);
+    
+    var cell3 = row.insertCell(2);
+	var element3 = document.createElement("input");
+	element3.type = "text";
+	element3.id = "per"+rowCount;
+	element3.name="per";
+	cell3.appendChild(element3);
+	element3.oninput=function(){ updateTotal(this); }
+	
+     
+    var cell4 = row.insertCell(3);
+	var element4 = document.createElement("input");
+	element4.type = "text";
+	element4.id = "quantity"+rowCount;
+	element4.name="quantity";
+	cell4.appendChild(element4);
+    element4.oninput=function(){ updateTotal(this); }
+
+	
+     var cell5 = row.insertCell(4);
+	var element5 = document.createElement("input");
+	element5.type = "text";
+	element5.id = "price"+rowCount;
+	element5.value="";
+	element5.name="price";
+	cell5.appendChild(element5);
+   
+    }   
+
+ function updateTotal(x) {
+ var myRow = x.parentNode.parentNode;
+ var nu1=myRow.cells[2].getElementsByTagName('INPUT')[0].value;
+ var nu2=myRow.cells[3].getElementsByTagName('INPUT')[0].value;
+  myRow.cells[4].getElementsByTagName('INPUT')[0].value =(nu1*nu2).toFixed(2);
+}	
+function calculateAmt()
+{
+var table = document.getElementById("dataTable");
+var rowCount = table.rows.length;
+var tot=0;
+for(var i=1;i<rowCount;i++)
+{
+var p=0;
+p=Number(table.rows[i].cells[4].getElementsByTagName('INPUT')[0].value);
+tot=tot+p;
+}
+
+document.getElementById("totalbox").value=tot.toFixed(2);
+}
+ </script>
+</head>
+<body>
+<div align="center">
+<h1>Pony Retail Store</h1><br>
+<h3>Receipt Details</h3><br>
+<form action="#" method="post" th:action="@{/first}" name="firstobj">
+<table>
+<tr> <td><label> Customer Id</label></td>
+<td><input type="text" placeholder="Enter the Mobile Number" name="cid" pattern ="[7-9]{1}[0-9]{9}" required>
+</td></tr>
+<tr><td>
+<label>Customer Name</label>
+</td>
+<td><input type="text" placeholder="Enter the name" name="cname"  pattern="[A-za-z]{1,32}" required/>
+</td>
+</tr>
+<tr><td>
+<label>EmailId</label></td>
+<td><input type="email" placeholder="abc@gmail.com" name="email" required/>
+</td></tr>
+<tr><td>
+<label>Address</label></td>
+<td><textarea rows="5" cols="50" placeholder="Fill Address here" name="address" required></textarea>
+</td></tr>
+</table>
+<label>Product Details</label>
+<br><br>
+<table id="dataTable" border ="1">
+<tr><th>Id</th>
+<th>Name</th>
+<th>Price per item</th>
+<th>Quantity</th>
+<th>Price</th>
+</tr>
+<tr><td>1</td>
+<td><input type="text" name="pname"/></td>
+<td><input type="text" id="per" name="per" oninput="updateTotal(this)"/> </td>
+<td><input type="text" id="quantity" name="quantity" oninput="updateTotal(this)"/></td>
+<td><input type="text" id="price" name="price" value="" /></td>
+</tr>
+</table>
+<INPUT type="button" value="Add Row" onclick="addRow('dataTable')"/>
+   <br>
+   <br>
+   <INPUT type="button" class="amount" id="calc"  value="Calculate" onclick="calculateAmt()"/>
+   <br>
+   <br>
+   <label  class="amt" id="amt">Total Amount:</label>
+  <input class="amount" type="text" id="totalbox" value="0.0" name="totalAmount"required/>
+  <br>
+  <br>
+  <input type="submit" class="amount" name="sendemail" value="SendEmail"/>
+  <input type="Reset" class="amt" value="Reset"/>  
+</form>
+<footer>
+  <a th:href="@{/view}" target="_parent">Click here to view Details</a>
+   </footer>
+</div>
+</body>
+</html>
