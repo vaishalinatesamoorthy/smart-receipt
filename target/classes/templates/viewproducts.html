@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>View Product Details</title>
+</head>
+<body>
+<div align="center">
+<table border ="1">
+<tr>
+<th>S.No </th>
+<th>Name</th>
+<th>Price per item</th>
+<th>Quantity</th>
+<th>Price</th>
+</tr>
+<th:block th:each="i:${result}">
+<th:block th:with="plist=${#strings.arraySplit(i.productdetails.pname,',')},per=${#strings.arraySplit(i.productdetails.per,',')},quantity=${#strings.arraySplit(i.productdetails.quantity,',')},price=${#strings.arraySplit(i.productdetails.price,',')}">
+<tr th:each="i,iterstat:${plist}">
+<td th:text="${iterstat.count}"></td> 
+<td th:text="${i}"></td>
+<td th:text="${per[iterstat.index]}"></td>
+<td th:text="${quantity[iterstat.index]}"></td>
+<td th:text="${price[iterstat.index]}"></td>
+</tr>
+</th:block>
+</th:block>
+</table>
+</div>
+</body>
+</html>
